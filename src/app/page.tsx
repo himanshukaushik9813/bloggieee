@@ -134,7 +134,7 @@ export default function HomePage() {
       <footer className="border-t border-white/10 bg-black/30">
         <div className="mx-auto max-w-7xl px-6 py-10 text-center">
           <p className="text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} BlogVerse. Built with Next.js & Three.js
+            <span suppressHydrationWarning>&copy; {new Date().getFullYear()} BlogVerse. Built with Next.js & Three.js</span>
           </p>
         </div>
       </footer>
