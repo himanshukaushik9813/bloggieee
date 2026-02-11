@@ -3,7 +3,12 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { VisualEditsMessenger } from "orchids-visual-edits";
 import Navbar from "@/components/navbar";
-import { Toaster } from "sonner";
+import SiteFooter from "@/components/site-footer";
+import AppFrame from "@/components/app-frame";
+import CustomCursor from "@/components/custom-cursor";
+import { ThemeProvider } from "@/components/theme-provider";
+import { BackToTop } from "@/components/back-to-top";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,8 +21,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BlogVerse - Modern Blog Platform",
-  description: "A modern blog platform with stunning visuals",
+  title: "BlogVerse - Modern Blog Platform by Himanshu Kaushik",
+  description: "A modern blog platform with stunning visuals. Created and owned by Himanshu Kaushik.",
 };
 
 export default function RootLayout({
@@ -26,14 +31,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0a0a0f] text-white min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground min-h-screen`}
       >
-        <Navbar />
-        <main>{children}</main>
-        <Toaster theme="dark" richColors />
-        <VisualEditsMessenger />
+        <ThemeProvider>
+          <CustomCursor />
+          <AppFrame>
+          <Navbar />
+          <main className="flex min-h-[calc(100vh-4rem)] flex-col">{children}</main>
+          <SiteFooter />
+          </AppFrame>
+          <BackToTop />
+          <Toaster richColors />
+          <VisualEditsMessenger />
+        </ThemeProvider>
       </body>
     </html>
   );

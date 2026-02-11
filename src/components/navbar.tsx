@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Menu, X, PenLine } from "lucide-react";
 
 export default function Navbar() {
@@ -21,74 +22,65 @@ export default function Navbar() {
   const links = [
     { href: "/", label: "Home" },
     { href: "/blogs", label: "Blogs" },
+    { href: "/write", label: "Write" },
+    { href: "/login", label: isAdmin ? "Dashboard" : "Admin Login" },
   ];
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur-xl">
+    <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link href="/" className="flex items-center gap-2 text-xl font-bold text-white">
-          <PenLine className="h-6 w-6 text-violet-400" />
-          <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
+        <Link href="/" className="flex items-center gap-2 text-xl font-bold text-foreground">
+          <PenLine className="h-6 w-6 text-violet-500 dark:text-violet-400" />
+          <span className="bg-linear-to-r from-violet-500 to-cyan-500 bg-clip-text text-transparent dark:from-violet-400 dark:to-cyan-400">
             BlogVerse
           </span>
         </Link>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-4 md:flex md:gap-8">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
               className={`text-sm font-medium transition-colors ${
                 pathname === l.href
-                  ? "text-white"
-                  : "text-gray-400 hover:text-white"
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {l.label}
             </Link>
           ))}
-          {isAdmin ? (
-            <Link href="/admin">
-              <Button variant="outline" size="sm" className="border-violet-500/50 text-violet-400 hover:bg-violet-500/10">
-                Dashboard
-              </Button>
-            </Link>
-          ) : (
-            <Link href="/login">
-              <Button variant="outline" size="sm" className="border-violet-500/50 text-violet-400 hover:bg-violet-500/10">
-                Admin Login
-              </Button>
-            </Link>
-          )}
+          <ThemeToggle />
         </div>
 
-        <button className="md:hidden text-white" onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            className="rounded p-2 text-foreground hover:bg-muted"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
       {menuOpen && (
-        <div className="border-t border-white/10 bg-black/90 md:hidden">
-          <div className="flex flex-col gap-4 px-6 py-4">
+        <div className="absolute left-0 right-0 top-full z-50 border-t border-border bg-background/95 backdrop-blur-xl md:hidden">
+          <div className="flex flex-col gap-1 px-6 py-4">
             {links.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
                 onClick={() => setMenuOpen(false)}
-                className="text-sm text-gray-300 hover:text-white"
+                className={`rounded-lg px-3 py-2 text-sm font-medium ${
+                  pathname === l.href ? "bg-violet-500/20 text-violet-600 dark:text-violet-400" : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
               >
                 {l.label}
               </Link>
             ))}
-            {isAdmin ? (
-              <Link href="/admin" onClick={() => setMenuOpen(false)} className="text-sm text-violet-400">
-                Dashboard
-              </Link>
-            ) : (
-              <Link href="/login" onClick={() => setMenuOpen(false)} className="text-sm text-violet-400">
-                Admin Login
-              </Link>
-            )}
           </div>
         </div>
       )}
